@@ -1,4 +1,4 @@
-package main
+package FileLogger
 
 import (
 	"os"
@@ -7,7 +7,7 @@ import (
 
 type FileLogger struct {
 	currentFile *os.File
-	fd		 int
+	fd          int
 }
 
 func NewLogger() *FileLogger {
@@ -27,7 +27,7 @@ func getTime(now time.Time) string {
 
 func MakeFilename() string {
 	now := time.Now()
-	return "log_" + getDate(now) + "." + getTime(now) +".txt"
+	return "log_" + getDate(now) + "." + getTime(now) + ".txt"
 }
 
 func (fl *FileLogger) Log(logMessage string) {
@@ -45,10 +45,9 @@ func (fl *FileLogger) Log(logMessage string) {
 		fl.currentFile = fileReopened
 	}
 	now := time.Now()
-	_, err := fl.currentFile.WriteString("At: "+getTime(now) + " "+ logMessage + "\n")
+	_, err := fl.currentFile.WriteString("At: " + getTime(now) + " " + logMessage + "\n")
 	if err != nil {
 		panic(err)
 	}
 	fl.currentFile.Close()
 }
-
