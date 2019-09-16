@@ -7,13 +7,11 @@ import (
 
 type FileLogger struct {
 	currentFile *os.File
-	fd          int
 }
 
 func NewLogger() *FileLogger {
 	return &FileLogger{
 		currentFile: nil,
-		fd:          0,
 	}
 }
 
@@ -25,14 +23,14 @@ func getTime(now time.Time) string {
 	return now.Format("15:04:05")
 }
 
-func MakeFilename() string {
+func makeFilename() string {
 	now := time.Now()
 	return "log_" + getDate(now) + "." + getTime(now) + ".txt"
 }
 
 func (fl *FileLogger) Log(logMessage string) {
 	if fl.currentFile == nil {
-		newLogFile, err := os.Create(MakeFilename())
+		newLogFile, err := os.Create(makeFilename())
 		if err != nil {
 			panic(err)
 		}
@@ -49,5 +47,8 @@ func (fl *FileLogger) Log(logMessage string) {
 	if err != nil {
 		panic(err)
 	}
-	fl.currentFile.Close()
+	err = fl.currentFile.Close()
+	if err != nil {
+		panic(err)
+	}
 }
